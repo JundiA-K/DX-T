@@ -1,0 +1,294 @@
+local plr = game.Players.LocalPlayer
+local char = plr.Character
+
+local yoff1 = 0
+local yoff2 = 0
+
+local gui = Instance.new("ScreenGui")
+gui.Parent = plr.PlayerGui
+gui.ResetOnSpawn = false
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Parent = gui
+MainFrame.Size = UDim2.new(0, 100, 0, 750)
+MainFrame.Draggable = true
+MainFrame.Active = true
+MainFrame.BackgroundTransparency = 0
+MainFrame.BackgroundColor3 = Color3.new(0.32549, 0.32549, 0.32549)
+MainFrame.Name = "MainFrame"
+
+local Textlabbel = Instance.new("TextLabel")
+Textlabbel.Parent = MainFrame
+Textlabbel.Position = UDim2.fromOffset(50, -50)
+Textlabbel.Size = UDim2.fromOffset(200, 50)
+Textlabbel.TextScaled = true
+Textlabbel.Text = "DX-T Menu"
+Textlabbel.TextColor3 = Color3.new(0.301961, 0.00784314, 0.00784314)
+Textlabbel.Font = Enum.Font.Highway
+Textlabbel.Name = "MenuText"
+
+local teleportframe = Instance.new("ScrollingFrame")
+teleportframe.Parent = gui
+teleportframe.Size = UDim2.new(0, 250, 0, 650)
+teleportframe.Draggable = true
+teleportframe.Active = true
+teleportframe.BackgroundTransparency = 0
+teleportframe.BackgroundColor3 = Color3.new(1, 1, 1)
+teleportframe.Position = MainFrame.Position + UDim2.fromOffset(100, 0)
+teleportframe.Visible = false
+teleportframe.CanvasSize = UDim2.fromScale(0, 100)
+teleportframe.ScrollingEnabled = true
+teleportframe.ScrollBarImageColor3 = Color3.new(0, 0, 0)
+teleportframe.ScrollBarImageTransparency = 0
+teleportframe.Name = "TeleportFrame"
+
+local TelportButton = Instance.new("ImageButton")
+TelportButton.Parent = teleportframe
+TelportButton.Size = UDim2.fromOffset(10, 10)
+TelportButton.Visible = false
+local TBtext = Instance.new("TextLabel")
+TBtext.Parent = TelportButton
+TBtext.Name = "Plrname"
+TBtext.Size = UDim2.fromOffset(100, 50)
+TBtext.Position = TelportButton.Position + UDim2.fromOffset(-10, 75)
+TBtext.BackgroundTransparency = 1
+TBtext.TextScaled = true
+TBtext.Text = "PlrName|PlrDn"
+
+local ShowEventsFrame = Instance.new("ScrollingFrame")
+ShowEventsFrame.Parent = gui
+ShowEventsFrame.Size = UDim2.new(0, 250, 0, 650)
+ShowEventsFrame.Draggable = true
+ShowEventsFrame.Active = true
+ShowEventsFrame.BackgroundTransparency = 0
+ShowEventsFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+ShowEventsFrame.Position = MainFrame.Position + UDim2.fromOffset(100, 0)
+ShowEventsFrame.Visible = false
+ShowEventsFrame.CanvasSize = UDim2.fromScale(0, 100)
+ShowEventsFrame.ScrollingEnabled = true
+ShowEventsFrame.ScrollBarImageColor3 = Color3.new(0, 0, 0)
+ShowEventsFrame.ScrollBarImageTransparency = 0
+ShowEventsFrame.Name = "EventsFrame"
+
+local FireEventButton = Instance.new("TextButton")
+FireEventButton.Parent = ShowEventsFrame
+FireEventButton.Size = UDim2.fromOffset(10, 10)
+FireEventButton.Visible = false
+FireEventButton.TextScaled = true
+FireEventButton.Text = "Event Name | Fire"
+
+-------------------------------- Decorations
+
+local uicorner = Instance.new("UICorner")
+uicorner.Parent = MainFrame
+
+uicorner:Clone().Parent = TelportButton
+uicorner:Clone().Parent = ShowEventsFrame
+
+local uigrid = Instance.new("UIGridLayout")
+uigrid.CellSize = UDim2.fromOffset(75, 75)
+uigrid.Parent = teleportframe
+uigrid.CellPadding = UDim2.fromOffset(75, 75)
+uigrid.FillDirection = 1
+uigrid.StartCorner = Enum.StartCorner.BottomLeft
+uigrid.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+uigrid:Clone().Parent = ShowEventsFrame
+
+--------------------------------
+
+------------------------- Setting up Buttons TP
+
+for _, p in pairs(game.Players:GetPlayers()) do
+	if p then
+		if p:IsA("Player") then
+			local cb = TelportButton:Clone()
+			cb.Parent = teleportframe
+			cb.Image = game.Players:GetUserThumbnailAsync(p.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+			cb.Visible = true
+			cb.Name = "cb"
+			yoff2 += 100
+			cb.Plrname.Text = p.Name.."|"..p.DisplayName
+			cb.MouseButton1Down:Connect(function()
+				char:PivotTo(p.Character.PrimaryPart.CFrame * CFrame.new(0, 0, -5))
+			end)
+		end
+	end
+end
+
+for _, events in pairs(game:GetDescendants()) do
+	if events:IsA("RemoteEvent") then
+		local eventbutton = FireEventButton:Clone()
+		eventbutton.Parent = ShowEventsFrame
+		eventbutton.Visible = true
+		eventbutton.Text = events.Name.."| تفعيل"
+	end
+end
+
+----------------------------
+
+local Buttons = {
+	["Destroy"] = Instance.new("TextButton"),
+	["TeleportButton"] = Instance.new("TextButton"),
+	["ShowEventsButton"] = Instance.new("TextButton"),
+	["ExportIY"] = Instance.new("TextButton"),
+	["ExportDexDev"] = Instance.new("TextButton"),
+	["TeleportAllPlayerButton"] = Instance.new("TextButton"),
+	["XRay"] = Instance.new("TextButton"),
+	["Tools"] = Instance.new("TextButton"),
+	["GivePointsIfThereIS"] = Instance.new("TextButton"),
+	["FreezePlayers"] = Instance.new("TextButton"),
+	["ClearPlayers"] = Instance.new("TextButton"),
+	["TeleportToVoid"] = Instance.new("TextButton"),
+}
+
+Buttons.Destroy.Text = "تدمير المينو"
+Buttons.TeleportButton.Text = "الأنتقال الى الاعبين"
+Buttons.ShowEventsButton.Text = "فحص إشارات السيرفر"
+Buttons.ExportIY.Text = "تشغيل infinity yeild"
+Buttons.ExportDexDev.Text = "تشغيل dex"
+Buttons.TeleportAllPlayerButton.Text = "سحب جميع الاعبين اليك (أمر وهمي فقط للسيرفر)"
+Buttons.XRay.Text = "رؤية الاعبين"
+Buttons.Tools.Text = "أغراض مفيدة (قريباً)"
+Buttons.GivePointsIfThereIS.Text = "أعطائك نقاط - أمر وهمي قم بأخذ الرتبة بسرعة !"
+Buttons.FreezePlayers.Text = "تجميد جميع الاعبين - أمر وهمي!"
+Buttons.ClearPlayers.Text = "تشليح الاعبين - أمر وهمي"
+Buttons.TeleportToVoid.Text = "الأنقال الى مكان الموت 💀 "
+
+Buttons.Destroy.MouseButton1Down:Connect(function()
+	gui:Destroy()
+end)
+
+Buttons.ExportIY.MouseButton1Down:Connect(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+end)
+
+Buttons.ExportDexDev.MouseButton1Down:Connect(function()
+	loadstring(game:HttpGet("https://cdn.wearedevs.net/scripts/Dex%20Explorer.txt"))()
+end)
+
+Buttons.TeleportButton.MouseButton1Down:Connect(function()
+	if teleportframe.Visible == false then
+		for _, c in pairs(teleportframe:GetChildren()) do
+			if c.Name == "cb" then
+				c:Destroy()
+			end
+		end
+		for _, p in pairs(game.Players:GetPlayers()) do
+			if p then
+				if p:IsA("Player") then
+					local cb = TelportButton:Clone()
+					cb.Parent = teleportframe
+					cb.Image = game.Players:GetUserThumbnailAsync(p.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
+					cb.Visible = true
+					cb.Name = "cb"
+					yoff2 += 100
+					cb.Plrname.Text = p.Name.."|"..p.DisplayName
+					cb.MouseButton1Down:Connect(function()
+						char:PivotTo(p.Character.PrimaryPart.CFrame * CFrame.new(0, 0, -5))
+					end)
+				end
+			end
+		end
+		teleportframe.Visible = true
+
+	else
+		teleportframe.Visible = false
+	end
+end)
+
+Buttons.ShowEventsButton.MouseButton1Down:Connect(function()
+	if ShowEventsFrame.Visible == false then
+		ShowEventsFrame.Visible = true
+	else
+		ShowEventsFrame.Visible = false
+	end
+end)
+
+Buttons.TeleportAllPlayerButton.MouseButton1Down:Connect(function()
+
+	for _, p in pairs(game.Players:GetChildren()) do
+		if p then
+			if p:IsA("Player") then
+				if p.Name ~= plr.Name then
+					p.Character:PivotTo(plr.Character.PrimaryPart.CFrame * CFrame.new(0, 0, -2))
+				end
+			end
+		end
+	end
+
+end)
+
+Buttons.FreezePlayers.MouseButton1Down:Connect(function()
+
+	for _, p in pairs(game.Players:GetChildren()) do
+		if p then
+			if p:IsA("Player") then
+				if p.Name ~= plr.Name then
+					if p.Character.PrimaryPart.Anchored == true then
+						p.Character.PrimaryPart.Anchored = false
+					else
+						p.Character.PrimaryPart.Anchored = true
+					end
+				end
+			end
+		end
+	end
+
+end)
+
+Buttons.ClearPlayers.MouseButton1Down:Connect(function()
+
+	for _, p in pairs(game.Players:GetChildren()) do
+		if p then
+			if p:IsA("Player") then
+				if p.Name ~= plr.Name then
+					for _, acc in pairs(p.Character:GetChildren()) do
+						if acc:IsA("Accessory") or acc:IsA("Model") then
+							acc:Destroy()
+						end
+					end
+				end
+			end
+		end
+	end
+
+end)
+
+Buttons.TeleportToVoid.MouseButton1Down:Connect(function()
+	plr.Character:MoveTo(Vector3.new(0, -250, 0))
+end)
+
+Buttons.XRay.MouseButton1Down:Connect(function()
+	loadstring(game:HttpGet("https://pastebin.com/raw/s7viVmDR"))()
+end)
+
+Buttons.GivePointsIfThereIS.MouseButton1Down:Connect(function()
+
+	local leaderstats = plr:FindFirstChild("leaderstats")
+	if leaderstats then
+		local points = leaderstats:FindFirstChild("Money") or leaderstats:FindFirstChild("money") or leaderstats:FindFirstChild("Points") or leaderstats:FindFirstChild("points")
+		if points then
+			points.Value = 100000000000000000
+		else
+			warn("لم يتم ا لعثور على النقاط داخل العبة!")
+		end
+	else
+		warn("لا يوجد نظام نقاط في العبة !")
+	end
+
+end)
+
+for _, butt in pairs(Buttons) do
+	butt.Parent = MainFrame
+	butt.Position = UDim2.fromOffset(10, 20 + yoff1)
+	butt.Size = UDim2.fromOffset(75, 75)
+	yoff1 += 80
+	butt.BackgroundTransparency = 0
+	butt.BackgroundColor3 = Color3.new(0, 0, 0)
+	butt.TextScaled = true
+	butt.TextColor3 = Color3.new(0.666667, 0, 0)
+	butt.TextStrokeTransparency = 0
+	butt.TextStrokeColor3 = Color3.new(0, 0, 0)
+	uicorner:Clone().Parent = butt
+end
